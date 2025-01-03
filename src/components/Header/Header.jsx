@@ -6,6 +6,7 @@ import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { format } from "date-fns";
 import { DateRange } from "react-date-range";
+import { createSearchParams, useNavigate } from "react-router-dom";
 function Header() {
   const [destination, setDestination] = useState("");
   const [openOptions, setOpenOptions] = useState(false);
@@ -14,6 +15,7 @@ function Header() {
     children: 0,
     room: 1,
   });
+  const navigate = useNavigate();
 
   const [date, setDate] = useState([
     {
@@ -31,6 +33,18 @@ function Header() {
         ...prev,
         [name]: operation === "inc" ? options[name] + 1 : options[name] - 1,
       };
+    });
+  };
+
+  const handleSearch = () => {
+    const encodedParams = createSearchParams({
+      date: JSON.stringify(date),
+      destination,
+      options: JSON.stringify(options),
+    });
+    navigate({
+      pathname: "/hotels",
+      search: encodedParams.toString(),
     });
   };
 
@@ -58,7 +72,7 @@ function Header() {
           {openOptions && <GuestOptionList options={options} handleOptions={handleOptions} setOpenOptions={setOpenOptions} />}
         </div>
         <div className="headerSearchItem">
-          <button className="headerSearchBtn">
+          <button className="headerSearchBtn" onClick={handleSearch}>
             <HiSearch className="headerIcon" />
           </button>
         </div>
