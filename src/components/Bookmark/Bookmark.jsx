@@ -5,7 +5,7 @@ import ReactCountryFlag from "react-country-flag";
 import { Link } from "react-router-dom";
 
 function Bookmark() {
-  const { isLoading, bookmarks } = useBookmark();
+  const { isLoading, bookmarks, currentBookmark } = useBookmark();
 
   if (isLoading) return <Loader />;
   return (
@@ -15,7 +15,7 @@ function Bookmark() {
         {bookmarks.map((item) => {
           return (
             <Link key={item.id} to={`${item.id}?lat=${item.latitude}&lng=${item.longitude}`}>
-              <div className="bookmarkItem ">
+              <div className={`bookmarkItem ${item.id === currentBookmark?.id ? "current-bookmark" : ""}`}>
                 <ReactCountryFlag svg countryCode={item.countryCode} />
                 <strong>{item.cityName}</strong>
                 <span>{item.country}</span>
